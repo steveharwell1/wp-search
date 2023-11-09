@@ -5,7 +5,7 @@ class CSSSearchSpider(SitemapSpider):
     """
     Search for a case-insensitive string anywhere on the live site.
     Usage
-    scrapy crawl re_search -a expression="[A-Z]" -o fileName.jl
+    scrapy crawl re_search -a expression="vice-president-for-research-and-economic-development" -o 2023-11-08-archive.jl
 
 
     Selector documentation. https://docs.scrapy.org/en/latest/topics/selectors.html
@@ -15,7 +15,7 @@ class CSSSearchSpider(SitemapSpider):
     sitemap_urls = ['https://www.tamuc.edu/sitemap_index.xml']
     filters = ['/people/', '/news/', '/category/']
 
-    def __init__(self, expression:str='unlikely text', full_page:str='False', full_site:str='False', **kwargs):
+    def __init__(self, expression:str='unlikely text', full_page:str='False', full_site:str='True', **kwargs):
         self.selector = expression
         self.full_page = full_page.lower() == 'true'
         self.full_site = full_site.lower() == 'true'
