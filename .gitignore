@@ -3,3 +3,6 @@ archived-searches
 .DS_Store
 __pycache__
 *.pyc
+*.jl
+*.csv
+*.xlsx
