@@ -28,7 +28,7 @@ class GenericSpider(scrapy.Spider):
         if self.url_filter and re.search(self.url_filter, response.url):
             yield {'url': response.url, 'title':name, 'type': content_type}
         try:
-            next_urls = response.css('a:not([href^="mailto"]):not([href^="tel"])::attr("href")').getall()
+            next_urls = response.css('a:not([href*="mailto:"]):not([href*="tel:"])::attr("href")').getall()
             if self.expression:
                 elems = response.css('html').re(self.expression)
                 for idx, elem in enumerate(elems, 1):
@@ -38,7 +38,7 @@ class GenericSpider(scrapy.Spider):
         if content_type.lower() == "pdf" and self.expression:
             try:
                 reader = PdfReader(io.BytesIO(response.body))
-                text = "".join([page.extract_text() for page in reader.pages]) + reader.metadata.title
+                text = "".join([page.extract_text() for page in reader.pages]) + str(reader.metadata.title)
                 if re.search(self.expression, text):
                     yield {'url': response.url, 'expression': self.expression, 'count': None, 'position': None, 'result': reader.metadata.title}
             except Exception as e:
