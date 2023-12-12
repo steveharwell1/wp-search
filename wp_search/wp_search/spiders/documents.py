@@ -5,6 +5,10 @@ import scrapy
 
 
 class GenericSpider(scrapy.Spider):
+    """
+    scrapy crawl doc_search -a url_filter="unpublishe?d?" -o unpublished.csv
+
+    """
     name = "doc_search"
     traps = ['aspx/', 'https://inside.tamuc.edu/library/about/hours/index.php']
 
