@@ -5,7 +5,7 @@ class CSSSearchSpider(SitemapSpider):
     """
     Search for a case-insensitive string anywhere on the live site.
     Usage
-    scrapy crawl css_search -a selector="a > span" -o fileName.jl
+    scrapy crawl css_search -a selector=".tamuc-explore-our-programs" -o fileName.jl
 
     Selector documentation. https://docs.scrapy.org/en/latest/topics/selectors.html
     """
@@ -49,8 +49,8 @@ class CSSSearchSpider(SitemapSpider):
             yield {'url': response.url, 'selector': self.selector, 'count': len(elems), 'position': idx, 'result': elem}
         if(self.show_misses and len(elems) == 0):
             yield {'url': response.url, 'selector': self.selector, 'count': len(elems), 'position': 'none', 'result': ''}
-            
-    
+
+
     def isInText(self, response):
         texts = response.xpath('//text()').getall()
         bodyText = " ".join(texts)
