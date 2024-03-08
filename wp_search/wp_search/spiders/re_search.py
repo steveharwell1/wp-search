@@ -6,8 +6,7 @@ class CSSSearchSpider(SitemapSpider):
     Search for a case-insensitive string anywhere on the live site.
     Usage
     scrapy crawl re_search -a expression="vice-president-for-research-and-economic-development" -o 2023-11-08-archive.jl && say "Scan complete"
-
-
+    scrapy crawl re_search -a expression="cost-and-aid/grants-2|cost-and-aid/student-employment-2|freshmen/financial-aid|freshmen/cost-and-aid|freshmen/cost|freshmen/grants|freshmen/loans|freshmen/scholarships|freshmen/student-employment|transfer/financial-aid|transfer/cost-and-aid|transfer/cost|transfer/grants|transfer/loans|transfer/scholarships|transfer/student-employment" -o 2024-02-23-archive.jl && say "Scan complete"
     Selector documentation. https://docs.scrapy.org/en/latest/topics/selectors.html
     """
     name = 're_search'
