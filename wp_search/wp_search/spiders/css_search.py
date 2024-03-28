@@ -6,7 +6,7 @@ class CSSSearchSpider(SitemapSpider):
     Search for a case-insensitive string anywhere on the live site.
     Usage
     scrapy crawl css_search -a selector=".tamuc-explore-our-programs" -o fileName.jl
-
+    scrapy crawl css_search -a selector=".pb-md-0, .pb-md-5, .pb-md-10, .pb-md-15, .pb-md-20, .pb-md-25, .pb-md-30, .pb-md-35, .pb-md-40, .pb-md-45, .pb-md-50, .pb-md-55, .pb-md-60, .pb-md-65, .pb-md-70, .pb-md-75, .pb-md-80, .pb-md-85, .pb-md-90, .pb-md-95, .pb-md-100, .pb-md-105, .pb-md-110, .pb-md-115, .pb-md-120, .pb-md-125, .pb-md-130, .pb-md-135, .pb-md-140, .pb-md-145, .pb-md-150" -o 2024-03-28-spacing.jl
     Selector documentation. https://docs.scrapy.org/en/latest/topics/selectors.html
     """
     name = 'css_search'
