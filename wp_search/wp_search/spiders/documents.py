@@ -6,21 +6,23 @@ import scrapy
 
 class GenericSpider(scrapy.Spider):
     """
-    scrapy crawl doc_search -a url_filter="unpublishe?d?" -o unpublished.csv
-
+    scrapy crawl doc_search -a expression=".{0,10}[dD][eE][iI][aA]?.{0,10}|.{0,10}[dD]\.[eE]\.[iI]\.[aA]?.{0,10}|.{0,10}diverse.{0,10}|.{0,10}diversity.{0,10}|.{0,10}[Ee]quality.{0,10}|.{0,10}[Ee]quitable.{0,10}|.{0,10}[Ee]quity.{0,10}|.{0,10}[Hh]ispanic [Oo]utreach.{0,10}|.{0,10}[Ii]nclusion.{0,10}|.{0,10}[Ii]nclusive.{0,10}|.{0,10}[Ii]nclusivity.{0,10}|.{0,10}[Ll]atin[Xx].{0,10}" -o 2024-05-22-dei.jl
     """
     name = "doc_search"
     traps = ['aspx/', 'https://inside.tamuc.edu/library/about/hours/index.php']
+    #allowed_domains = ['www.tamuc.edu', 'inside.tamuc.edu', 'coursecatalog.tamuc.edu', 'sites.tamuc.edu','www.tamucviscom.org', 'lionathletics.com']
+    allowed_domains = ['www.tamuc.edu', 'inside.tamuc.edu', 'coursecatalog.tamuc.edu', 'sites.tamuc.edu','www.tamucviscom.org', 'lionathletics.com']
 
-    def __init__(self, allowed_domain='www.tamuc.edu', start_url='https://www.tamuc.edu', url_filter=None, expression=None, only_text="False", full_page="True", **kwargs):
-        self.allowed_domains = [allowed_domain, 'inside.tamuc.edu']
+    def __init__(self, start_url='https://www.tamuc.edu',
+                 url_filter=None, expression=None,
+                 only_text="False", full_page="False",  **kwargs):
         self.start_url = start_url
         self.url_filter = url_filter
         self.expression = expression
         self.only_text = only_text.lower() == "true"
+        self.full_page = full_page.lower() == "true"
         self.content_area = 'html'
-        if full_page.lower() != "true":
-            self.content_area = ".mainPageContent, #main"
+
 
         super().__init__(**kwargs)
 
@@ -64,8 +66,17 @@ class GenericSpider(scrapy.Spider):
 
     def search_page(self, response):
         if not self.only_text:
-            return response.css('#main, .mainPageContent').re(self.expression)
+            if self.full_page:
+                return response.css('html').re(self.expression)
+            if 'www.tamuc.edu' in response.url or 'inside.tamuc.edu' in response.url:
+                return response.css('#main, .mainPageContent').re(self.expression)
+            return response.css('html').re(self.expression)
         else:
-            texts = response.css('#main *::text, .mainPageContent *::text').getall()
-            bodyText = " ".join(texts)
-            return re.findall(self.expression, bodyText)
+            if 'www.tamuc.edu' in response.url or 'inside.tamuc.edu' in response.url:
+                texts = response.css('#main *::text, .mainPageContent *::text').getall()
+                bodyText = " ".join(texts)
+                return re.findall(self.expression, bodyText)
+            else:
+                texts = response.css('html *::text').getall()
+                bodyText = " ".join(texts)
+                return re.findall(self.expression, bodyText)
