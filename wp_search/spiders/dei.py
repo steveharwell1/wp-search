@@ -6,12 +6,12 @@ import scrapy
 
 class GenericSpider(scrapy.Spider):
     """
-    scrapy crawl doc_search -a expression=".{0,10}[dD][eE][iI][aA]?.{0,10}|.{0,10}[dD]\.[eE]\.[iI]\.[aA]?.{0,10}|.{0,10}diverse.{0,10}|.{0,10}diversity.{0,10}|.{0,10}[Ee]quality.{0,10}|.{0,10}[Ee]quitable.{0,10}|.{0,10}[Ee]quity.{0,10}|.{0,10}[Hh]ispanic [Oo]utreach.{0,10}|.{0,10}[Ii]nclusion.{0,10}|.{0,10}[Ii]nclusive.{0,10}|.{0,10}[Ii]nclusivity.{0,10}|.{0,10}[Ll]atin[Xx].{0,10}" -o 2024-05-22-dei.jl
+    scrapy crawl dei_search -a expression=".{0,10}[dD][eE][iI][aA]?.{0,10}|.{0,10}[dD]\.[eE]\.[iI]\.[aA]?.{0,10}|.{0,10}diverse.{0,10}|.{0,10}diversity.{0,10}|.{0,10}[Ee]quality.{0,10}|.{0,10}[Ee]quitable.{0,10}|.{0,10}[Ee]quity.{0,10}|.{0,10}[Hh]ispanic [Oo]utreach.{0,10}|.{0,10}[Ii]nclusion.{0,10}|.{0,10}[Ii]nclusive.{0,10}|.{0,10}[Ii]nclusivity.{0,10}|.{0,10}[Ll]atin[Xx].{0,10}" -o 2024-05-22-dei.jl
     """
-    name = "doc_search"
+    name = "dei_search"
     traps = ['aspx/', 'https://inside.tamuc.edu/library/about/hours/index.php']
     #allowed_domains = ['www.tamuc.edu', 'inside.tamuc.edu', 'coursecatalog.tamuc.edu', 'sites.tamuc.edu','www.tamucviscom.org', 'lionathletics.com']
-    allowed_domains = ['www.tamuc.edu', 'inside.tamuc.edu']
+    allowed_domains = ['www.tamuc.edu', 'inside.tamuc.edu', 'coursecatalog.tamuc.edu', 'sites.tamuc.edu','www.tamucviscom.org', 'lionathletics.com']
 
     def __init__(self, start_url='https://www.tamuc.edu',
                  url_filter=None, expression=None,
