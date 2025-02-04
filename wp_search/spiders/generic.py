@@ -30,6 +30,7 @@ class GenericSpider(scrapy.Spider):
             next_urls = response.css('a::attr("href")').getall()
             if self.expression:
                 elems = response.css('html').re(self.expression)
+                elems = response.xpath("//*[contains(text(), 'Curriculum Vitae')]").getall()
                 for idx, elem in enumerate(elems, 1):
                     yield {'url': response.url, 'expression': self.expression, 'count': len(elems), 'position': idx, 'result': elem}
         except:

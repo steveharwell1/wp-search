@@ -3,6 +3,7 @@ import re
 from pypdf import PdfReader
 import scrapy
 
+from .data import links
 
 class GenericSpider(scrapy.Spider):
     """
@@ -11,23 +12,25 @@ class GenericSpider(scrapy.Spider):
     name = "doc_search"
     traps = ['aspx/', 'https://inside.tamuc.edu/library/about/hours/index.php']
     #allowed_domains = ['www.tamuc.edu', 'inside.tamuc.edu', 'coursecatalog.tamuc.edu', 'sites.tamuc.edu','www.tamucviscom.org', 'lionathletics.com']
-    allowed_domains = ['www.tamuc.edu', 'inside.tamuc.edu']
+    allowed_domains = ['www.tamuc.edu']
 
-    def __init__(self, start_url='https://www.tamuc.edu',
+    def __init__(self, start_urls=links,
                  url_filter=None, expression=None,
-                 only_text="False", full_page="False",  **kwargs):
-        self.start_url = start_url
+                 only_text="False", full_page="False", show_misses="False",  **kwargs):
+        self.start_urls = start_urls
         self.url_filter = url_filter
         self.expression = expression
         self.only_text = only_text.lower() == "true"
         self.full_page = full_page.lower() == "true"
+        self.show_misses = show_misses.lower() == "true"
         self.content_area = 'html'
 
 
         super().__init__(**kwargs)
 
     def start_requests(self):
-        yield scrapy.Request(url=self.start_url, callback=self.parse)
+        for link in self.start_urls:
+            yield scrapy.Request(url=link, callback=self.parse)
 
     def parse(self, response):
         try:
@@ -43,6 +46,8 @@ class GenericSpider(scrapy.Spider):
                 'a:not([href*="mailto:"]):not([href*="tel:"])::attr("href")').getall()
             if self.expression:
                 elems = self.search_page(response)
+                if self.show_misses and len(elems) == 0:
+                    yield {'url': response.url, 'title': name, 'expression': self.expression, 'count': 0, 'position': "", 'result': ""}
                 for idx, elem in enumerate(elems, 1):
                     yield {'url': response.url, 'title': name, 'expression': self.expression, 'count': len(elems), 'position': idx, 'result': elem}
         except:
