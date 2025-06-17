@@ -7,7 +7,7 @@ class GenericSpider(scrapy.Spider):
     name = "generic"
     traps = ['aspx/', 'https://inside.tamuc.edu/library/about/hours/index.php']
 
-    def __init__(self, allowed_domain='www.tamuc.edu', start_url='https://www.tamuc.edu', url_filter=None, expression=None, **kwargs):
+    def __init__(self, allowed_domain='www.etamu.edu', start_url='https://www.etamu.edu', url_filter=None, expression=None, **kwargs):
         self.allowed_domains = [allowed_domain, 'inside.tamuc.edu']
         self.start_url = start_url
         self.url_filter = url_filter

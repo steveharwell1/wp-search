@@ -9,12 +9,15 @@ class CSSSearchSpider(SitemapSpider):
     scrapy crawl css_search -a selector="body:not(.page-box-hide-campus-illustration)" -o 2024-12-17-campus-illustration.jl
     scrapy crawl css_search -a selector=".pb-md-0, .pb-md-5, .pb-md-10, .pb-md-15, .pb-md-20, .pb-md-25, .pb-md-30, .pb-md-35, .pb-md-40, .pb-md-45, .pb-md-50, .pb-md-55, .pb-md-60, .pb-md-65, .pb-md-70, .pb-md-75, .pb-md-80, .pb-md-85, .pb-md-90, .pb-md-95, .pb-md-100, .pb-md-105, .pb-md-110, .pb-md-115, .pb-md-120, .pb-md-125, .pb-md-130, .pb-md-135, .pb-md-140, .pb-md-145, .pb-md-150" -o 2024-03-28-spacing.jl
     search for the more block with the class name of "tamuc-section-more"
-    scrapy crawl css_search -a selector=".tamuc-departmental-news-bites" -o 2025-01-31-has-tamuc-departmental-news-bites.csv
+    scrapy crawl css_search -a selector=".tamuc-featured-news-slider" -o 2025-02-18-featured-news-slider.csv
+    scrapy crawl css_search -a selector=".tamuc-news-bites, .tamuc-featured-news-slider" -o 2025-04-01-featured-news-slider.csv
+    scrapy crawl css_search -a selector=".tamuc-form" -o 2025-05-07-tamuc-forms.csv
+    scrapy crawl css_search -a selector=":is(p) + :not(.tamuc-accordion):not(.tamuc-formatted-container):not(.wp-block-tamuc-slim-container) > :is(h2, h3, h4, h5, h6):first-child,:is(p) + .tamuc-formatted-container--no-padding-top > :is(h2, h3, h4, h5, h6):first-child" -o 2025-05-23-spacing-updates.csv
     Selector documentation. https://docs.scrapy.org/en/latest/topics/selectors.html
     """
     name = 'css_search'
-    allowed_domains = ['www.tamuc.edu']
-    sitemap_urls = ['https://www.tamuc.edu/sitemap_index.xml']
+    allowed_domains = ['www.etamu.edu']
+    sitemap_urls = ['https://www.etamu.edu/sitemap_index.xml']
     filters = ['/people/', '/news/', '/category/']
 
     def __init__(self, selector:str='unlikely text', full_site:str='False', show_misses:str="False", get_attrs="False", **kwargs):

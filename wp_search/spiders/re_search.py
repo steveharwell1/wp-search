@@ -10,8 +10,8 @@ class CSSSearchSpider(SitemapSpider):
     Selector documentation. https://docs.scrapy.org/en/latest/topics/selectors.html
     """
     name = 're_search'
-    allowed_domains = ['www.tamuc.edu']
-    sitemap_urls = ['https://www.tamuc.edu/sitemap_index.xml']
+    allowed_domains = ['www.etamu.edu']
+    sitemap_urls = ['https://www.etamu.edu/sitemap_index.xml']
     filters = ['/people/', '/news/', '/category/']
 
     def __init__(self, expression:str='unlikely text', full_page:str='False', full_site:str='True', **kwargs):

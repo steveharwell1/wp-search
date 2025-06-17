@@ -8,14 +8,31 @@ from .data import links
 class GenericSpider(scrapy.Spider):
     """
     scrapy crawl doc_search -a expression=".{0,10}[dD][eE][iI][aA]?.{0,10}|.{0,10}[dD]\.[eE]\.[iI]\.[aA]?.{0,10}|.{0,10}diverse.{0,10}|.{0,10}diversity.{0,10}|.{0,10}[Ee]quality.{0,10}|.{0,10}[Ee]quitable.{0,10}|.{0,10}[Ee]quity.{0,10}|.{0,10}[Hh]ispanic [Oo]utreach.{0,10}|.{0,10}[Ii]nclusion.{0,10}|.{0,10}[Ii]nclusive.{0,10}|.{0,10}[Ii]nclusivity.{0,10}|.{0,10}[Ll]atin[Xx].{0,10}" -o 2024-05-22-dei.jl
+    scrapy crawl doc_search -a expression=".{0,10}[Aa]ffirmative[ .]?[Aa]ction.{0,10}" -o 2025-02-12-affirmative.jl
+    scrapy crawl doc_search -a expression=".{0,10}[dD]iversity.{0,10}|{0,10}[rR]ace.{0,10}|{0,10}[dD]iverse.{0,10}|{0,10}[rR]eligion.{0,10}|{0,10}[eE]quity.{0,10}|{0,10}[Ss]ex.{0,10}|{0,10}[dD][eE][iI][aA]?.{0,10}|{0,10}[gG]ender.{0,10}|{0,10}[gG]ender [iI]dentity.{0,10}|{0,10}[aA]ccessibility.{0,10}|{0,10}[cC]ulture.{0,10}|{0,10}[eE]ngagement.{0,10}|{0,10}[cC]olor.{0,10}|{0,10}[iI]nclusion.{0,10}|{0,10}[eE]thnicity.{0,10}|{0,10}[iI]nclusivity.{0,10}|{0,10}[aA]ccountability.{0,10}|{0,10}[aA]dvocacy.{0,10}|{0,10}[cC]limate.{0,10}|{0,10}bB]elongingness.{0,10}|{0,10}[aA]nti-.{0,10}|{0,10}[bB]ias.{0,10}|{0,10}[mM]arginalized.{0,10}|{0,10}[dD]iscrimination.{0,10}|{0,10}[rR]acism.{0,10}|{0,10}[Bb][iI][Pp][Oo][Cc].{0,10}|{0,10}[tT]rans-.{0,10}|{0,10}[cC]is-.{0,10}|{0,10}[iI]nstitutionalized.{0,10}|{0,10}[lL]atin[aox]?.{0,10}|{0,10}[Mm]icroaggression.{0,10}|{0,10}[Oo]ppression.{0,10}|{0,10}[pP]rejudice.{0,10}|{0,10}[Pp]rivilege.{0,10}|{0,10}[Oo]rientation.{0,10}|{0,10}[Ww]hiteness.{0,10}" -o 2025-03-19-coursecatalog.jl
+    scrapy crawl doc_search -a expression="[Ee]ducate.*[Dd]iscover.*[Aa]chieve" -o 2025-04-18-educate-discover-achieve.jl
+    scrapy crawl doc_search -a expression="force.com" -o 2025-06-17-force.csv
     """
     name = "doc_search"
     traps = ['aspx/', 'https://inside.tamuc.edu/library/about/hours/index.php']
-    #allowed_domains = ['www.tamuc.edu', 'inside.tamuc.edu', 'coursecatalog.tamuc.edu', 'sites.tamuc.edu','www.tamucviscom.org', 'lionathletics.com']
-    allowed_domains = ['www.tamuc.edu']
+    allowed_domains = [
+    'www.etamu.edu', 
+    'inside.tamuc.edu',
+    'coursecatalog.tamuc.edu',
+    'sites.tamuc.edu',
+    'tamucviscom.org',
+    # 'lionathletics.com',
+    ]
+    # allowed_domains = ['coursecatalog.tamuc.edu', ]
+    #allowed_domains = ['www.etamu.edu', 'insid']
 
-    def __init__(self, start_urls=links,
-                 url_filter=None, expression=None,
+    def __init__(self, start_urls=[
+            'https://www.etamu.edu', 
+            'https://inside.tamuc.edu',
+            'https://coursecatalog.tamuc.edu',
+            'https://sites.tamuc.edu',
+            'https://tamucviscom.org',
+        ], url_filter=None, expression=None,
                  only_text="False", full_page="False", show_misses="False",  **kwargs):
         self.start_urls = start_urls
         self.url_filter = url_filter
@@ -73,11 +90,11 @@ class GenericSpider(scrapy.Spider):
         if not self.only_text:
             if self.full_page:
                 return response.css('html').re(self.expression)
-            if 'www.tamuc.edu' in response.url or 'inside.tamuc.edu' in response.url:
+            if 'www.etamu.edu' in response.url or 'inside.tamuc.edu' in response.url:
                 return response.css('#main, .mainPageContent').re(self.expression)
             return response.css('html').re(self.expression)
         else:
-            if 'www.tamuc.edu' in response.url or 'inside.tamuc.edu' in response.url:
+            if 'www.etamu.edu' in response.url or 'inside.tamuc.edu' in response.url:
                 texts = response.css('#main *::text, .mainPageContent *::text').getall()
                 bodyText = " ".join(texts)
                 return re.findall(self.expression, bodyText)

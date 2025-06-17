@@ -9,8 +9,8 @@ class SearchSpider(SitemapSpider):
     scrapy crawl search -a term="search text" -a full_site="true" -o fileName.jl
     """
     name = 'search'
-    allowed_domains = ['www.tamuc.edu']
-    sitemap_urls = ['https://www.tamuc.edu/sitemap_index.xml']
+    allowed_domains = ['www.etamu.edu']
+    sitemap_urls = ['https://www.etamu.edu/sitemap_index.xml']
     filters = ['/people/', '/news/', '/category/']
 
     def __init__(self, term:str='unlikely text', full_site:str='False', body_only:str="True", **kwargs):
