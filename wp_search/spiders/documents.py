@@ -5,6 +5,14 @@ import scrapy
 
 from .data import links
 
+domains = [
+    'www.etamu.edu',
+    'inside.etamu.edu',
+    'coursecatalog.tamuc.edu',
+    'sites.tamuc.edu',
+    'tamucviscom.org',
+    ]
+
 class GenericSpider(scrapy.Spider):
     """
     scrapy crawl doc_search -a expression=".{0,10}[dD][eE][iI][aA]?.{0,10}|.{0,10}[dD]\.[eE]\.[iI]\.[aA]?.{0,10}|.{0,10}diverse.{0,10}|.{0,10}diversity.{0,10}|.{0,10}[Ee]quality.{0,10}|.{0,10}[Ee]quitable.{0,10}|.{0,10}[Ee]quity.{0,10}|.{0,10}[Hh]ispanic [Oo]utreach.{0,10}|.{0,10}[Ii]nclusion.{0,10}|.{0,10}[Ii]nclusive.{0,10}|.{0,10}[Ii]nclusivity.{0,10}|.{0,10}[Ll]atin[Xx].{0,10}" -o 2024-05-22-dei.jl
@@ -14,25 +22,10 @@ class GenericSpider(scrapy.Spider):
     scrapy crawl doc_search -a expression="force.com" -o 2025-06-17-force.csv
     """
     name = "doc_search"
-    traps = ['aspx/', 'https://inside.tamuc.edu/library/about/hours/index.php']
-    allowed_domains = [
-    'www.etamu.edu', 
-    'inside.tamuc.edu',
-    'coursecatalog.tamuc.edu',
-    'sites.tamuc.edu',
-    'tamucviscom.org',
-    # 'lionathletics.com',
-    ]
-    # allowed_domains = ['coursecatalog.tamuc.edu', ]
-    #allowed_domains = ['www.etamu.edu', 'insid']
+    traps = ['aspx/', 'https://inside.etamu.edu/library/about/hours/index.php']
+    allowed_domains = domains
 
-    def __init__(self, start_urls=[
-            'https://www.etamu.edu', 
-            'https://inside.tamuc.edu',
-            'https://coursecatalog.tamuc.edu',
-            'https://sites.tamuc.edu',
-            'https://tamucviscom.org',
-        ], url_filter=None, expression=None,
+    def __init__(self, start_urls=["https://" + domain for domain in domains], url_filter=None, expression=None,
                  only_text="False", full_page="False", show_misses="False",  **kwargs):
         self.start_urls = start_urls
         self.url_filter = url_filter
@@ -67,6 +60,8 @@ class GenericSpider(scrapy.Spider):
                     yield {'url': response.url, 'title': name, 'expression': self.expression, 'count': 0, 'position': "", 'result': ""}
                 for idx, elem in enumerate(elems, 1):
                     yield {'url': response.url, 'title': name, 'expression': self.expression, 'count': len(elems), 'position': idx, 'result': elem}
+            else:
+                yield {'url': response.url, 'title': name}
         except:
             next_urls = []
         if content_type.lower() == "pdf" and self.expression:
@@ -74,8 +69,11 @@ class GenericSpider(scrapy.Spider):
                 reader = PdfReader(io.BytesIO(response.body))
                 text = "".join([page.extract_text()
                                for page in reader.pages]) + str(reader.metadata.title)
-                for elem in re.findall(self.expression, text):
-                    yield {'url': response.url, 'title': reader.metadata.title, 'expression': self.expression, 'count': None, 'position': None, 'result': elem, }
+                if self.expression:
+                    for elem in re.findall(self.expression, text):
+                        yield {'url': response.url, 'title': reader.metadata.title, 'expression': self.expression, 'count': None, 'position': None, 'result': elem, }
+                else:
+                    yield {'url': response.url, 'title': reader.metadata.title}
             except Exception as e:
                 # yield {'url': response.url, 'expression': self.expression, 'count': None, 'position': None, 'result': "Could not read document: " + str(e)}
                 pass
