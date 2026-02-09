@@ -9,7 +9,9 @@
 `source venv/bin/activate`
 
 ## Default command example
-`scrapy crawl doc_search -a expression=“my search here" -o 2024-05-22-filename.jl && say "Scan complete"`
+```
+scrapy crawl doc_search -a expression="my search here" -o 2024-05-22-filename.csv && say "Scan complete"
+```
 
 # help
 use https://regex101.com/ for testing regular expression
